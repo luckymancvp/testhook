@@ -10,9 +10,9 @@ class HookController extends Controller
     public function actionReceive()
     {
         $res = new Response();
-        $res->data = CJSON::encode($_POST);
+        $res->data = var_export($_POST, true);
         $res->save();
-        
+
         $this->render('receive');
     }
 
