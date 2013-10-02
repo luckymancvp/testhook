@@ -16,6 +16,9 @@ return array(
 	'import'=>array(
 		'application.models.*',
 		'application.components.*',
+        'application.components.phpseclib.*',
+        'application.components.phpseclib.Crypt.*',
+        'application.components.phpseclib.Math.BigInteger',
 	),
 
 	'modules'=>array(

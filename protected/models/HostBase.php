@@ -1,20 +1,26 @@
 <?php
 
 /**
- * This is the DAO model class for table "response".
+ * This is the DAO model class for table "host".
  *
- * The followings are the available columns in table 'response':
+ * The followings are the available columns in table 'host':
  * @property integer $id
- * @property string $data
- * @property string $res
+ * @property string $hostname
+ * @property string $username
+ * @property string $port
+ * @property string $key
  * @property string $create_date
+ * @property string $update_date
+ *
+ * The followings are the available model relations:
+ * @property Repository[] $repositories
  */
-abstract class ResponseBase extends CActiveRecord
+abstract class HostBase extends CActiveRecord
 {
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
-	 * @return Response the static model class
+	 * @return Host the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -26,7 +32,7 @@ abstract class ResponseBase extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'response';
+		return 'host';
 	}
 
 	/**
@@ -37,11 +43,11 @@ abstract class ResponseBase extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('data, res', 'length', 'max'=>5000),
-			array('create_date', 'safe'),
+			array('hostname, key, create_date, update_date', 'required'),
+			array('hostname, username, port, key', 'length', 'max'=>45),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, data, res, create_date', 'safe', 'on'=>'search'),
+			array('id, hostname, username, port, key, create_date, update_date', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -53,6 +59,7 @@ abstract class ResponseBase extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'repositories' => array(self::HAS_MANY, 'Repository', 'host_id'),
 		);
 	}
 
@@ -63,9 +70,12 @@ abstract class ResponseBase extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'data' => 'Data',
-			'res' => 'Res',
+			'hostname' => 'Hostname',
+			'username' => 'Username',
+			'port' => 'Port',
+			'key' => 'Key',
 			'create_date' => 'Create Date',
+			'update_date' => 'Update Date',
 		);
 	}
 
@@ -81,9 +91,12 @@ abstract class ResponseBase extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
-		$criteria->compare('data',$this->data,true);
-		$criteria->compare('res',$this->res,true);
+		$criteria->compare('hostname',$this->hostname,true);
+		$criteria->compare('username',$this->username,true);
+		$criteria->compare('port',$this->port,true);
+		$criteria->compare('key',$this->key,true);
 		$criteria->compare('create_date',$this->create_date,true);
+		$criteria->compare('update_date',$this->update_date,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
