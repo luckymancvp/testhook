@@ -15,12 +15,11 @@ class HookController extends Controller
 
     public function actionReceive()
     {
-        $_POST["payload"] = $_GET["payload"];
         $res = new Response();
-        $res->data = $_POST["payload"];
+        $res->data = Yii::app()->request->getParam('payload');
         $res->save();
 
-        $payload   = CJSON::decode($_POST["payload"], false);
+        $payload   = CJSON::decode($res->data, false);
         $inputRepo = $payload->repository;
 
         /** @var Repository $repo */
@@ -31,6 +30,8 @@ class HookController extends Controller
         $ssh      = $this->get_connect($repo->host);
         $res->res = $ssh->exec("cd $repo->path; git pull;");
         $res->save();
+
+        echo $res->res;
     }
 
     /**
