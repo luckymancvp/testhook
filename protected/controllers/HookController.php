@@ -27,9 +27,12 @@ class HookController extends Controller
         if (!$repo)
             throw new CHttpException(404, "Not found repo $inputRepo->name");
 
+        $host = $repo->host;
+        logged($host->hostname . $host->port .$host->key);
         $ssh      = $this->get_connect($repo->host);
         $res->res = $ssh->exec("cd $repo->path; git pull;");
         $res->save();
+
 
         echo $res->res;
     }
@@ -43,11 +46,13 @@ class HookController extends Controller
      */
     private function get_connect($host)
     {
+        logged("a");
         $key_file = Yii::getPathOfAlias('application'). '/keys/'. $host->key;
 
-        $ssh = new Net_SSH2($host->hostname);
+        $ssh = new Net_SSH2($host->hostname, $host->port);
         $key = new Crypt_RSA();
         $key->loadKey(file_get_contents($key_file));
+        logged($ssh->getLog());
         if (!$ssh->login($host->username, $key)) {
             throw new CHttpException(404, "Login Fail");
         }

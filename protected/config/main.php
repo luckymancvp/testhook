@@ -5,6 +5,8 @@
 
 // This is the main Web application configuration. Any writable
 // CWebApplication properties can be configured here.
+
+require dirname(__FILE__).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'globals.php';
 return array(
 	'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
 	'name'=>'My Web Application',
@@ -60,18 +62,30 @@ return array(
 		),
 		'log'=>array(
 			'class'=>'CLogRouter',
-			'routes'=>array(
-				array(
-					'class'=>'CFileLogRoute',
-					'levels'=>'error, warning',
-				),
-				// uncomment the following to show log messages on web pages
-				/*
-				array(
-					'class'=>'CWebLogRoute',
-				),
-				*/
-			),
+            'routes'=>array(
+                array(
+                    'class'  =>'CFileLogRoute',
+                    'levels' =>'warning',
+                    'logFile'=> 'waring.log'
+                ),
+                // デバッグのログをファイルに集める。
+                array(
+                    'class'  =>'CFileLogRoute',
+                    'levels' =>'debug, info',
+                    'logFile'=>'debug.log',
+                ),
+                // エラーのログをファイルに集める。
+                array(
+                    'class'  =>'CFileLogRoute',
+                    'levels' =>'error',
+                    'logFile'=>'error.log',
+                ),
+                // 全部のログをファイルに集める。
+                array(
+                    'class'  =>'CFileLogRoute',
+                    'logFile'=>'application.log',
+                ),
+            ),
 		),
 	),
 
