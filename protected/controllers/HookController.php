@@ -31,6 +31,8 @@ class HookController extends Controller
         logged($host->hostname . $host->port .$host->key);
         $ssh      = $this->get_connect($repo->host);
         $res->res = $ssh->exec("cd $repo->path; git pull;");
+        //$res->res = $ssh->exec("cd $repo->path; git pull;");
+        logged("|".$res->res."|");
         $res->save();
 
 
